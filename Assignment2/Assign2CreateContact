@@ -1,0 +1,78 @@
+package week2.day2;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Assign2CreateContact {
+
+	public static void main(String[] args) {
+
+		// browser setup
+		WebDriverManager.chromedriver().setup();
+		ChromeDriver driver = new ChromeDriver();
+
+		// load url and prepare
+		driver.navigate().to("http://leaftaps.com/opentaps/control/login");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+		// login using credentials
+		driver.findElement(By.id("username")).sendKeys("demosalesmanager");
+		driver.findElement(By.id("password")).sendKeys("crmsfa");
+		driver.findElement(By.className("decorativeSubmit")).click();
+
+		// click on crm/sfa
+		driver.findElement(By.xpath("//a[contains(text(),'CRM/SFA')]")).click();
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+		// new contact
+		driver.findElement(By.xpath("//a[(text()='Contacts')]")).click();
+		driver.findElement(By.xpath("//ul[@class='shortcuts']//a[text()='Create Contact']")).click();
+
+		driver.findElement(By.id("firstNameField")).sendKeys("TestMag");
+		driver.findElement(By.id("lastNameField")).sendKeys("TestRaj");
+		driver.findElement(By.xpath("//input[contains(@id,'firstNameLocal')]")).sendKeys("TestLocal");
+		driver.findElement(By.xpath("//input[contains(@id,'lastNameLocal')]")).sendKeys("TestLast");
+		driver.findElement(By.xpath("//input[contains(@id,'departmentName')]")).sendKeys("Food & Beverages");
+		driver.findElement(By.xpath("//textarea[contains(@id,'description')]")).sendKeys("What is description");
+		driver.findElement(By.xpath("//input[contains(@id,'birthDate')]")).sendKeys("8/11/1976");
+		driver.findElement(By.xpath("//input[contains(@id,'primaryEmail')]")).sendKeys("abc@gmail.com");
+		WebElement state = driver.findElement(By.xpath("//select[contains(@id,'generalState')]"));
+		Select stateList = new Select(state);
+		stateList.selectByVisibleText("New York");
+		driver.findElement(By.xpath("//input[@value='Create Contact']")).click();
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+		System.out.println("Page Title after creating contact is " + driver.getTitle());
+
+		// edit contact
+		driver.findElement(By.xpath("//a[text()='Edit']")).click();
+
+		// clear desc
+		driver.findElement(By.xpath("//textarea[contains(@id,'description')]")).clear();
+
+		// enter imp notice
+		driver.findElement(By.xpath("//textarea[contains(@id,'importantNote')]")).sendKeys("This is important notice");
+
+		// save
+		driver.findElement(By.xpath("//input[@value='Update']")).click();
+
+		// get resultant page title
+		System.out.println("Page Title after editting contact is " + driver.getTitle());
+
+		// close browser
+		driver.quit();
+
+	}
+
+}
